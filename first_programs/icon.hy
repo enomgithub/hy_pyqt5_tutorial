@@ -13,7 +13,7 @@
   (defn initUI [self]
     (.setGeometry self 300 300 300 220)
     (.setWindowTitle self "Icon")
-    (.setWindowIcon self (QIcon "./src/cat.png"))
+    (.setWindowIcon self (QIcon "../src/cat.png"))
     (.show self)))
 
 
