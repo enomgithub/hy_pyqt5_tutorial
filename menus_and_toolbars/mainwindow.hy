@@ -15,7 +15,7 @@
     (setv text-edit (QTextEdit))
     (.setCentralWidget self text-edit)
 
-    (setv exit-act (QAction (QIcon "exit24.png") "Exit" self))
+    (setv exit-act (QAction (QIcon "../src/exit24.png") "Exit" self))
     (.setShortcut exit-act "Ctrl+Q")
     (.setStatusTip exit-act "Exit application")
     ((. exit-act triggered connect) (. self close))

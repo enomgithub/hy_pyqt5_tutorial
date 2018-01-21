@@ -12,7 +12,7 @@
     (.initUI self))
 
     (defn initUI [self]
-      (setv exit-act (QAction (QIcon "exit.png") "&Exit" self))
+      (setv exit-act (QAction (QIcon "../src/exit24.png") "&Exit" self))
       (.setShortcut exit-act "Ctrl+Q")
       (.setStatusTip exit-act "Exit application")
       (.triggered.connect exit-act qApp.quit)
