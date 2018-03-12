@@ -1,39 +1,36 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QMainWindow QAction qApp QApplication]])
 (import [PyQt5.QtGui [QIcon]])
 
 
 (defclass Example [QMainWindow]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
+    ((. (super) --init--))
+    (setv exit-act (QAction (QIcon "../src/exit24.png") "&Exit" self))
+    ((. exit-act setShortcut) "Ctrl+Q")
+    ((. exit-act setStatusTip) "Exit application")
+    ((. exit-act triggered connect) (. qApp quit))
 
-    (defn initUI [self]
-      (setv exit-act (QAction (QIcon "../src/exit24.png") "&Exit" self))
-      (.setShortcut exit-act "Ctrl+Q")
-      (.setStatusTip exit-act "Exit application")
-      (.triggered.connect exit-act qApp.quit)
+    ((. self statusBar))
 
-      (.statusBar self)
+    (setv menubar ((. self menuBar)))
+    (setv file-menu ((. menubar addMenu) "&File"))
+    ((. file-menu addAction) exit-act)
 
-      (setv menubar (.menuBar self))
-      (setv file-menu (.addMenu menubar "&File"))
-      (.addAction file-menu exit-act)
-
-      (.setGeometry self 300 300 300 200)
-      (.setWindowTitle self "Simple menu")
-      (.show self)))
+    ((. self setGeometry) 300 300 300 200)
+    ((. self setWindowTitle) "Simple menu"))
+    None)
 
 
 (defn main []
-  (setv app (QApplication sys.argv))
+  (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

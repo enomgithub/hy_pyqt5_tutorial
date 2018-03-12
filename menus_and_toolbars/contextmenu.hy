@@ -1,37 +1,35 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QMainWindow qApp QMenu QApplication]])
 
 
 (defclass Example [QMainWindow]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
-
-  (defn initUI [self]
-    (.setGeometry self 300 300 300 200)
-    (.setWindowTitle self "Context menu")
-    (.show self))
+    ((. (super) --init--))
+    ((. self setGeometry) 300 300 300 200)
+    ((. self setWindowTitle) "Context menu")
+    None)
 
   (defn contextMenuEvent [self event]
-    (setv cmenu (QMenu self))
-    (setv new-act (.addAction cmenu "New"))
-    (setv opn-act (.addAction cmenu "Open"))
-    (setv quit-act (.addAction cmenu "Quit"))
-    (setv action (.exec_ cmenu (.mapToGlobal self (.pos event))))
+    (setv menu (QMenu self))
+    (setv new-act ((. menu addAction) "New"))
+    (setv opn-act ((. menu addAction) "Open"))
+    (setv quit-act ((. menu addAction) "Quit"))
+    (setv action ((. menu exec_) ((. self mapToGlobal) ((. event pos)))))
 
-    (if (= action quit-act)
-      (.quit qApp))))
+    (when (= action quit-act)
+          ((. qApp quit)))
+    None))
 
 
 (defn main []
-  (setv app (QApplication sys.argv))
+  (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

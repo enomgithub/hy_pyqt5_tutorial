@@ -1,45 +1,43 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QMainWindow QAction QApplication]])
 
 
 (defclass Example [QMainWindow]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
+    ((. (super) --init--))
+    (setv (. self statusbar) ((. self statusBar)))
+    ((. self statusbar showMessage) "Ready")
 
-  (defn initUI [self]
-    (setv self.statusbar (.statusBar self))
-    (.statusbar.showMessage self "Ready")
-
-    (setv menubar (.menuBar self))
-    (setv view-menu (.addMenu menubar "View"))
+    (setv menubar ((. self menuBar)))
+    (setv view-menu ((. menubar addMenu) "View"))
 
     (setv view-stat-act (QAction "View statusbar" self :checkable True))
-    (.setStatusTip view-stat-act "View statusbar")
-    (.setChecked view-stat-act True)
-    (.triggered.connect view-stat-act self.toggle-menu)
+    ((. view-stat-act setStatusTip) "View statusbar")
+    ((. view-stat-act setChecked) True)
+    ((. view-stat-act triggered connect) (. self toggle-menu))
 
-    (.addAction view-menu view-stat-act)
+    ((. view-menu addAction) view-stat-act)
 
-    (.setGeometry self 300 300 300 200)
-    (.setWindowTitle self "Check menu")
-    (.show self))
+    ((. self setGeometry) 300 300 300 200)
+    ((. self setWindowTitle) "Check menu")
+    None)
 
   (defn toggle-menu [self state]
     (if (= state True)
-      (.show self.statusbar)
-      (.hide self.statusbar))))
+        ((. self statusbar show))
+        ((. self statusbar hide)))
+    None))
 
 
 (defn main []
   (setv app (QApplication sys.argv))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))
