@@ -1,45 +1,42 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QMainWindow QTextEdit QAction QApplication]])
 (import [PyQt5.QtGui [QIcon]])
 
 
 (defclass Example [QMainWindow]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
-
-  (defn initUI [self]
+    ((. (super) --init--))
     (setv text-edit (QTextEdit))
-    (.setCentralWidget self text-edit)
+    ((. self setCentralWidget) text-edit)
 
     (setv exit-act (QAction (QIcon "../src/exit24.png") "Exit" self))
-    (.setShortcut exit-act "Ctrl+Q")
-    (.setStatusTip exit-act "Exit application")
+    ((. exit-act setShortcut) "Ctrl+Q")
+    ((. exit-act setStatusTip) "Exit application")
     ((. exit-act triggered connect) (. self close))
 
-    (.statusBar self)
+    ((. self statusBar))
 
-    (setv menubar (.menuBar self))
-    (setv file-menu (.addMenu menubar "&File"))
-    (.addAction file-menu exit-act)
+    (setv menubar ((. self menuBar)))
+    (setv file-menu ((. menubar addMenu) "&File"))
+    ((. file-menu addAction) exit-act)
 
-    (setv toolbar (.addToolBar self "Exit"))
-    (.addAction toolbar exit-act)
+    (setv toolbar ((. self addToolBar) "Exit"))
+    ((. toolbar addAction) exit-act)
 
-    (.setGeometry self 300 300 350 250)
-    (.setWindowTitle self "Main window")
-    (.show self)))
+    ((. self setGeometry) 300 300 350 250)
+    ((. self setWindowTitle) "Main window")
+    None))
 
 
 (defn main []
-  (setv app (QApplication sys.argv))
+  (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))
