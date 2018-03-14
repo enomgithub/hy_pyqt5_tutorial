@@ -1,17 +1,12 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QWidget QVBoxLayout QPushButton QSizePolicy
                           QLabel QFontDialog QApplication]])
 
 
 (defclass Example [QWidget]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
-
-  (defn initUI [self]
+    ((. (super) --init--))
     (setv vbox (QVBoxLayout))
 
     (setv btn (QPushButton "Dialog" self))
@@ -28,23 +23,26 @@
 
     ((. self setGeometry) 300 300 250 180)
     ((. self setWindowTitle) "Font dialog")
-    (.show self))
+    None)
 
   (defn show-dialog [self]
-    (setv (, font ok) (.getFont QFontDialog))
+    (setv (, font ok) ((. QFontDialog getFont)))
 
-    ; OKボタンを押したら、self.lblに
-    ; フォント設定を適用する
-    (if ok
-      ((. self lbl setFont) font))))
+    ;; OKボタンを押したら、self.lblに
+    ;; フォント設定を適用する
+    (when ok
+          ((. self lbl setFont) font))
+    None))
 
 
 (defn main []
   (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))
