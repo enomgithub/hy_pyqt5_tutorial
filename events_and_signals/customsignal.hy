@@ -1,7 +1,5 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtCore [pyqtSignal QObject]])
 (import [PyQt5.QtWidgets [QMainWindow QApplication]])
 
@@ -12,30 +10,29 @@
 
 (defclass Example [QMainWindow]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
+    ((. (super) --init--))
+    (setv (. self c) (Communicate))
+    ((. (. self c close-app) connect) (. self close))
 
-  (defn initUI [self]
-    (setv self.c (Communicate))
-    (.connect (. self c close-app) (. self close))
+    ((. self setGeometry) 300 300 290 150)
+    ((. self setWindowTitle) "Emit signal")
+    None)
 
-    (.setGeometry self 300 300 290 150)
-    (.setWindowTitle self "Emit signal")
-    (.show self))
-
-  ; マウスをクリックするとウインドウを閉じるように設定する
-  ; クリックするボタンは問わない
+  ;; マウスをクリックするとウインドウを閉じるように設定する
+  ;; クリックするボタンは問わない
   (defn mousePressEvent [self event]
-    (.emit (. self c close-app))
+    ((. (. self c close-app) emit))
     None))
 
 
 (defn main []
   (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

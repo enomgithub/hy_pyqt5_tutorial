@@ -1,37 +1,33 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtCore [Qt]])
 (import [PyQt5.QtWidgets [QWidget QWidget QApplication]])
 
 
 (defclass Example [QWidget]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
+    ((. (super) --init--))
+    ((. self setGeometry) 300 300 250 150)
+    ((. self setWindowTitle) "Event handler")
+    None)
 
-  (defn initUI [self]
-    (.setGeometry self 300 300 250 150)
-    (.setWindowTitle self "Event handler")
-    (.show self))
-
-  ; keyPressEventは戻り値がNone、
-  ; closeメソッドは戻り値がboolなので、
-  ; HyではNoneを明記する必要がある
+  ;; keyPressEventは戻り値がNone、
+  ;; closeメソッドは戻り値がboolなので、
+  ;; HyではNoneを明記する必要がある
   (defn keyPressEvent [self e]
-    (if (= (.key e) (. Qt Key-Escape))
-      (do
-        (.close self)
-        None))))
+    (when (= ((. e key)) (. Qt Key-Escape))
+          ((. self close)))
+    None))
 
 
 (defn main []
   (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

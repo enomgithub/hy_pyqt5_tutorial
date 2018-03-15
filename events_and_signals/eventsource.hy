@@ -1,42 +1,40 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QMainWindow QPushButton QApplication]])
 
 
 (defclass Example [QMainWindow]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
-
-  (defn initUI [self]
+    ((. (super) --init--))
     (setv btn1 (QPushButton "Button 1" self))
-    (.move btn1 30 50)
+    ((. btn1 move) 30 50)
 
     (setv btn2 (QPushButton "Button 2" self))
-    (.move btn2 150 50)
+    ((. btn2 move) 150 50)
 
     ((. btn1 clicked connect) (. self button-clicked))
     ((. btn2 clicked connect) (. self button-clicked))
 
-    (.statusBar self)
+    ((. self statusBar))
 
-    (.setGeometry self 300 300 290 150)
-    (.setWindowTitle self "Event sender")
-    (.show self))
+    ((. self setGeometry) 300 300 290 150)
+    ((. self setWindowTitle) "Event sender")
+    None)
 
   (defn button-clicked [self]
-    (setv sender (.sender self))
-    ((. (.statusBar self) showMessage) (+ (.text sender) " was pressed"))))
+    (setv sender ((. self sender)))
+    ((. (.statusBar self) showMessage) (+ ((. sender text)) " was pressed"))
+    None))
 
 
 (defn main []
   (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))
