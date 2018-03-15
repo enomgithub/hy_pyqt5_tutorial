@@ -1,20 +1,19 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QApplication QWidget]])
 
 
 (defn main []
-  (setv app (QApplication sys.argv))
+  (setv app (QApplication (. sys argv)))
   (setv w (QWidget))
-  (.resize w 250 150)
-  (.move w 300 300)
-  (.setWindowTitle w "Simple")
-  (.show w)
-  (.exec_ app)
+  ((. w resize) 250 150)
+  ((. w move) 300 300)
+  ((. w setWindowTitle) "Simple")
+  ((. w show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

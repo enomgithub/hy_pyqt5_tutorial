@@ -1,33 +1,30 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QWidget QPushButton qApp QApplication]])
 (import [PyQt5.QtCore [QCoreApplication]])
 
 
 (defclass Example [QWidget]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
-
-  (defn initUI [self]
+    ((. (super) --init--))
     (setv qbtn (QPushButton "Quit" self))
-    (.clicked.connect qbtn qApp.quit)
-    (.resize qbtn (.sizeHint qbtn))
-    (.move qbtn 50 50)
+    ((. qbtn clicked connect) (. qApp quit))
+    ((. qbtn resize) ((. qbtn sizeHint)))
+    ((. qbtn move) 50 50)
 
-    (.setGeometry self 300 300 250 150)
-    (.setWindowTitle self "Quit button")
-    (.show self)))
+    ((. self setGeometry) 300 300 250 150)
+    ((. self setWindowTitle) "Quit button")
+    None))
 
 
 (defn main []
-  (setv app (QApplication sys.argv))
+  (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

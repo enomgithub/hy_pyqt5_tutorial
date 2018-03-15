@@ -1,34 +1,36 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QWidget QMessageBox QApplication]])
 
 
 (defclass Example [QWidget]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
+    ((. (super) --init--))
 
-  (defn initUI [self]
-    (.setGeometry self 300 300 250 150)
-    (.setWindowTitle self "Message box")
-    (.show self))
+    ((. self setGeometry) 300 300 250 150)
+    ((. self setWindowTitle) "Message box")
+    None)
 
   (defn closeEvent [self event]
-    (setv reply (.question QMessageBox self "Message" "本当に終了しますか？"
-                 (| QMessageBox.Yes QMessageBox.No) QMessageBox.No))
-    (if (= reply QMessageBox.Yes)
-      (.accept event)
-      (.ignore event))))
+    (setv reply ((. QMessageBox question) self
+                                          "Message" "本当に終了しますか？"
+                                          (| (. QMessageBox Yes)
+                                             (. QMessageBox No))
+                                          (. QMessageBox No)))
+    (if (= reply (. QMessageBox Yes))
+        ((. event accept))
+        ((. event ignore)))
+    None))
 
 
 (defn main []
-  (setv app (QApplication sys.argv))
+  (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec_))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))
