@@ -1,7 +1,6 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
+;; -*- coding: utf-8 -*-
 (import random)
-(import sys)
 
 (import [PyQt5.QtWidgets [QWidget QApplication ]])
 (import [PyQt5.QtGui [QPainter]])
@@ -68,5 +67,6 @@
   0)
 
 
-(if (= --name-- "__main__")
-  ((. sys exit) (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

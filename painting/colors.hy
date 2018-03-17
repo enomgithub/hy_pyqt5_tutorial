@@ -1,7 +1,5 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QWidget QApplication]])
 (import [PyQt5.QtGui [QPainter QColor QBrush]])
 
@@ -58,5 +56,6 @@
   0)
 
 
-(if (= --name-- "__main__")
-  ((. sys exit) (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))

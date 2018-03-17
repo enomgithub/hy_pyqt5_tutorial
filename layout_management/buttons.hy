@@ -1,49 +1,47 @@
 #!/usr/bin/env hy
-; -*- coding: utf-8 -*-
-(import sys)
-
+;; -*- coding: utf-8 -*-
 (import [PyQt5.QtWidgets [QWidget QPushButton QHBoxLayout QVBoxLayout
                           QApplication]])
 
 
 (defclass Example [QWidget]
   (defn --init-- [self]
-    (.--init-- (super))
-    (.initUI self))
+    ((. (super) --init--))
 
-  (defn initUI [self]
-    ; ボタンを作成する
+    ;; ボタンを作成する
     (setv ok-button (QPushButton "OK"))
     (setv cancel-button (QPushButton "Cancel"))
 
-    ; 子ウィジェットを水平配置する箱を作成し、
-    ; 伸縮する空白（ストレッチ）と二つのボタンを箱内に配置する
+    ;; 子ウィジェットを水平配置する箱を作成し、
+    ;; 伸縮する空白（ストレッチ）と二つのボタンを箱内に配置する
     (setv hbox (QHBoxLayout))
-    (.addStretch hbox 1)
-    (.addWidget hbox ok-button)
-    (.addWidget hbox cancel-button)
+    ((. hbox addStretch) 1)
+    ((. hbox addWidget) ok-button)
+    ((. hbox addWidget) cancel-button)
 
-    ; 子ウィジェットを垂直配置する箱を作成し、
-    ; 水平配置する箱をその中に配置する
+    ;; 子ウィジェットを垂直配置する箱を作成し、
+    ;; 水平配置する箱をその中に配置する
     (setv vbox (QVBoxLayout))
-    (.addStretch vbox)
-    (.addLayout vbox hbox)
+    ((. vbox addStretch))
+    ((. vbox addLayout) hbox)
 
-    ; 子ウィジェットを垂直配置する箱を、
-    ; 親ウィジェット内に配置する
-    (.setLayout self vbox)
+    ;; 子ウィジェットを垂直配置する箱を、
+    ;; 親ウィジェット内に配置する
+    ((. self setLayout) vbox)
 
-    (.setGeometry self 300 300 300 150)
-    (.setWindowTitle self "Buttons")
-    (.show self)))
+    ((. self setGeometry) 300 300 300 150)
+    ((. self setWindowTitle) "Buttons")
+    None))
 
 
 (defn main []
   (setv app (QApplication (. sys argv)))
   (setv ex (Example))
-  (.exec_ app)
+  ((. ex show))
+  ((. app exec-))
   0)
 
 
-(if (= --name-- "__main__")
-  (.exit sys (main)))
+(when (= --name-- "__main__")
+      (import sys)
+      ((. sys exit) (main)))
